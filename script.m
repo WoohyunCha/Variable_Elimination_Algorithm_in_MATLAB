@@ -46,7 +46,26 @@ f2 = to_factor(3, [4,5], [1,1], bn);
 ans1 = product_factor(f1, f2);
 ans2 = sum_out(ans1, 3);
 
-pb_jm = eliminate(1, [4,5], [1,1], bn);
+pb_jm = [ [1;0],[1;1], [1;1], eliminate(1, [4,5], [1,1], bn);
+    [1;0], [1;1], [0;0],  eliminate(1, [4,5], [1,0], bn);
+    [1;0], [0;0], [1;1], eliminate(1, [4,5], [0,1], bn);
+    [1;0], [0;0], [0;0], eliminate(1,[4,5], [0, 0], bn)];
+
+f_true_where = find(pb_jm(:, 1) == 1);
+f_false_where = find(pb_jm(:, 1) == 0);
+pb_jm = [ones(length(f_true_where), 1), pb_jm(f_true_where, 1:0), pb_jm(f_true_where, 1+1:end); ...
+                        zeros(length(f_false_where), 1), pb_jm(f_false_where, 1:1-1), pb_jm(f_false_where, 1+1:end)];
+
+pe_jm = [[1;1], [1;1], [1;0], eliminate(2, [4,5], [1,1], bn);
+    [1;1], [0;0], [1;0], eliminate(2, [4,5], [1,0], bn);
+    [0;0], [1;1], [1;0], eliminate(2, [4,5], [0,1], bn);
+    [0;0], [0;0], [1;0], eliminate(2,[4,5], [0, 0], bn)];
+
+f_true_where = find(pe_jm(:, 1) == 1);
+f_false_where = find(pe_jm(:, 1) == 0);
+pe_jm = [ones(length(f_true_where), 1), pe_jm(f_true_where, 1:0), pe_jm(f_true_where, 1+1:end); ...
+                        zeros(length(f_false_where), 1), pe_jm(f_false_where, 1:1-1), pe_jm(f_false_where, 1+1:end)];
+
 
 function dist = eliminate(x, e, obsv, bn)
     order = get_ordering(x, bn);
