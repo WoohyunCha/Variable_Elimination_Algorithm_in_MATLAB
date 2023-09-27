@@ -40,12 +40,6 @@ n5.cpt = [1, 1, pm_a;
         0, 0, 1-pm_NOTa];
 bn = [n1, n2, n3, n4, n5];
 
-
-f1 = to_factor(4, [4,5], [1,1], bn);
-f2 = to_factor(3, [4,5], [1,1], bn);
-ans1 = product_factor(f1, f2);
-ans2 = sum_out(ans1, 3);
-
 pb_jm = [ [1;0],[1;1], [1;1], eliminate(1, [4,5], [1,1], bn);
     [1;0], [1;1], [0;0],  eliminate(1, [4,5], [1,0], bn);
     [1;0], [0;0], [1;1], eliminate(1, [4,5], [0,1], bn);
@@ -66,6 +60,10 @@ f_false_where = find(pe_jm(:, 1) == 0);
 pe_jm = [ones(length(f_true_where), 1), pe_jm(f_true_where, 1:0), pe_jm(f_true_where, 1+1:end); ...
                         zeros(length(f_false_where), 1), pe_jm(f_false_where, 1:1-1), pe_jm(f_false_where, 1+1:end)];
 
+disp('P[B|j,m]');
+disp(pb_jm);
+disp('P[E|j,m]');
+disp(pe_jm);
 
 function dist = eliminate(x, e, obsv, bn)
     order = get_ordering(x, bn);
